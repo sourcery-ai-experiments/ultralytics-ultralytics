@@ -188,7 +188,7 @@ class Mosaic(BaseMixTransform):
         n (int, optional): The grid size, either 4 (for 2x2) or 9 (for 3x3).
     """
 
-    def __init__(self, dataset, imgsz=640, p=1.0, n=4):
+    def __init__(self, dataset, imgsz=640, p=1.0, n=4, p9=0.0):
         """Initializes the object with a dataset, image size, probability, and border."""
         assert 0 <= p <= 1.0, f"The probability should be in range [0, 1], but got {p}."
         assert n in {4, 9}, "grid must be equal to 4 or 9."
@@ -197,9 +197,11 @@ class Mosaic(BaseMixTransform):
         self.imgsz = imgsz
         self.border = (-imgsz // 2, -imgsz // 2)  # width, height
         self.n = n
+        self.p9 = p9
 
     def get_indexes(self, buffer=True):
         """Return a list of random indexes from the dataset."""
+        self.n = 9 if random.uniform(0, 1) < self.p9 else 4
         if buffer:  # select images from buffer
             return random.choices(list(self.dataset.buffer), k=self.n - 1)
         else:  # select any images
@@ -808,7 +810,9 @@ class CopyPaste:
             p (float, optional): The probability of applying the Copy-Paste augmentation. Must be between 0 and 1.
                                  Default is 0.5.
         """
+        import os
         self.p = p
+        self.iou_thres = float(os.getenv("COPY_PASTE", 0.30))
 
     def __call__(self, labels):
         """
@@ -843,7 +847,7 @@ class CopyPaste:
             ins_flip.fliplr(w)
 
             ioa = bbox_ioa(ins_flip.bboxes, instances.bboxes)  # intersection over area, (N, M)
-            indexes = np.nonzero((ioa < 0.30).all(1))[0]  # (N, )
+            indexes = np.nonzero((ioa < self.iou_thres).all(1))[0]  # (N, )
             n = len(indexes)
             for j in random.sample(list(indexes), k=round(self.p * n)):
                 cls = np.concatenate((cls, cls[[j]]), axis=0)
@@ -1099,7 +1103,7 @@ def v8_transforms(dataset, imgsz, hyp, stretch=False):
     """Convert images to a size suitable for YOLOv8 training."""
     pre_transform = Compose(
         [
-            Mosaic(dataset, imgsz=imgsz, p=hyp.mosaic),
+            Mosaic(dataset, imgsz=imgsz, p=hyp.mosaic, p9=hyp.mosaic9),
             CopyPaste(p=hyp.copy_paste),
             RandomPerspective(
                 degrees=hyp.degrees,
