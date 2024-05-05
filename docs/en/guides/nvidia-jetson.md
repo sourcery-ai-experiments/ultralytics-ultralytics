@@ -133,7 +133,7 @@ pip install onnxruntime_gpu-1.17.0-cp38-cp38-linux_aarch64.whl
 !!! Note
 
     `onnxruntime-gpu` will automatically revert back the numpy version to latest. So we need to reinstall numpy to `1.23.5` to fix an issue by executing:
-    
+
     `pip install numpy==1.23.5`
 
 ## Use TensorRT on NVIDIA Jetson
@@ -191,7 +191,7 @@ Eventhough all model exports are working with NVIDIA Jetson, we have only includ
 
 <div style="text-align: center;">
     <img width="800" src="https://github.com/ultralytics/ultralytics/assets/20147381/202950fa-c24a-43ec-90c8-4d7b6a6c406e" alt="NVIDIA Jetson Ecosystem">
-</div>   
+</div>
 
 ### Detailed Comparison Table
 
