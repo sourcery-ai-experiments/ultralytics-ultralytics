@@ -149,7 +149,7 @@ class BaseModel(nn.Module):
         """Perform augmentations on input image x and return augmented inference."""
         LOGGER.warning(
             f"WARNING ⚠️ {self.__class__.__name__} does not support augmented inference yet. "
-            f"Reverting to single-scale inference instead."
+            "Reverting to single-scale inference instead."
         )
         return self._predict_once(x)
 
@@ -746,17 +746,17 @@ def torch_safe_load(weight):
             raise TypeError(
                 emojis(
                     f"ERROR ❌️ {weight} appears to be an Ultralytics YOLOv5 model originally trained "
-                    f"with https://github.com/ultralytics/yolov5.\nThis model is NOT forwards compatible with "
-                    f"YOLOv8 at https://github.com/ultralytics/ultralytics."
-                    f"\nRecommend fixes are to train a new model using the latest 'ultralytics' package or to "
-                    f"run a command with an official YOLOv8 model, i.e. 'yolo predict model=yolov8n.pt'"
+                    "with https://github.com/ultralytics/yolov5.\nThis model is NOT forwards compatible with "
+                    "YOLOv8 at https://github.com/ultralytics/ultralytics."
+                    "\nRecommend fixes are to train a new model using the latest 'ultralytics' package or to "
+                    "run a command with an official YOLOv8 model, i.e. 'yolo predict model=yolov8n.pt'"
                 )
             ) from e
         LOGGER.warning(
             f"WARNING ⚠️ {weight} appears to require '{e.name}', which is not in ultralytics requirements."
             f"\nAutoInstall will run now for '{e.name}' but this feature will be removed in the future."
-            f"\nRecommend fixes are to train a new model using the latest 'ultralytics' package or to "
-            f"run a command with an official YOLOv8 model, i.e. 'yolo predict model=yolov8n.pt'"
+            "\nRecommend fixes are to train a new model using the latest 'ultralytics' package or to "
+            "run a command with an official YOLOv8 model, i.e. 'yolo predict model=yolov8n.pt'"
         )
         check_requirements(e.name)  # install missing module
         ckpt = torch.load(file, map_location="cpu")
@@ -765,7 +765,7 @@ def torch_safe_load(weight):
         # File is likely a YOLO instance saved with i.e. torch.save(model, "saved_model.pt")
         LOGGER.warning(
             f"WARNING ⚠️ The file '{weight}' appears to be improperly saved or formatted. "
-            f"For optimal results, use model.save('filename.pt') to correctly save YOLO models."
+            "For optimal results, use model.save('filename.pt') to correctly save YOLO models."
         )
         ckpt = {"model": ckpt.model}
 
