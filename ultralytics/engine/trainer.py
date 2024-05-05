@@ -324,7 +324,7 @@ class BaseTrainer:
             f'Image sizes {self.args.imgsz} train, {self.args.imgsz} val\n'
             f'Using {self.train_loader.num_workers * (world_size or 1)} dataloader workers\n'
             f"Logging results to {colorstr('bold', self.save_dir)}\n"
-            f'Starting training for ' + (f"{self.args.time} hours..." if self.args.time else f"{self.epochs} epochs...")
+            'Starting training for ' + (f"{self.args.time} hours..." if self.args.time else f"{self.epochs} epochs...")
         )
         if self.args.close_mosaic:
             base_idx = (self.epochs - self.args.close_mosaic) * nb
@@ -727,7 +727,7 @@ class BaseTrainer:
             LOGGER.info(
                 f"{colorstr('optimizer:')} 'optimizer=auto' found, "
                 f"ignoring 'lr0={self.args.lr0}' and 'momentum={self.args.momentum}' and "
-                f"determining best 'optimizer', 'lr0' and 'momentum' automatically... "
+                "determining best 'optimizer', 'lr0' and 'momentum' automatically... "
             )
             nc = getattr(model, "nc", 10)  # number of classes
             lr_fit = round(0.002 * 5 / (4 + nc), 6)  # lr0 fit equation to 6 decimal places
@@ -753,7 +753,7 @@ class BaseTrainer:
         else:
             raise NotImplementedError(
                 f"Optimizer '{name}' not found in list of available optimizers "
-                f"[Adam, AdamW, NAdam, RAdam, RMSProp, SGD, auto]."
+                "[Adam, AdamW, NAdam, RAdam, RMSProp, SGD, auto]."
                 "To request support for addition optimizers please visit https://github.com/ultralytics/ultralytics."
             )
 
