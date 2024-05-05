@@ -48,6 +48,7 @@ from ultralytics.utils.torch_utils import (
     select_device,
     strip_optimizer,
 )
+from security import safe_command
 
 
 class BaseTrainer:
@@ -189,7 +190,7 @@ class BaseTrainer:
             cmd, file = generate_ddp_command(world_size, self)
             try:
                 LOGGER.info(f'{colorstr("DDP:")} debug command {" ".join(cmd)}')
-                subprocess.run(cmd, check=True)
+                safe_command.run(subprocess.run, cmd, check=True)
             except Exception as e:
                 raise e
             finally:
